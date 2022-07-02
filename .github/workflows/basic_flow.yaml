@@ -25,25 +25,25 @@ jobs:
      - name: build and push the production version of server
        uses: docker/build-push-action@v3
        with:
-         context: "{{defaultContext}}:server"
+         context: ./server
          push: true
          tags: dhandstg/multi-server
      - name: build and push the production version of client
        uses: docker/build-push-action@v3
        with:
-         context: "{{defaultContext}}:client"
+         context: ./client
          push: true
          tags: dhandstg/multi-client
      - name: build and push the production version of nginx server
        uses: docker/build-push-action@v3
        with:
-         context: "{{defaultContext}}:nginx"
+         context: ./nginx
          push: true
          tags: dhandstg/multi-nginx
      - name: build and push the production version of worker
        uses: docker/build-push-action@v3
        with:
-         context: "{{defaultContext}}:worker"
+         context: ./worker
          push: true
          tags: dhandstg/multi-worker
 
