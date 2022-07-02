@@ -22,18 +22,18 @@ jobs:
      - name: run client container and get test coverage
        run: |
          docker run -e CI=true dhandstg/react-test npm test -- --coverage
-     - name: build and push the production version of client
-       uses: docker/build-push-action@v3
-       with:
-         context: "{{defaultContext}}:client"
-         push: true
-         tags: dhandstg/multi-client
      - name: build and push the production version of server
        uses: docker/build-push-action@v3
        with:
          context: "{{defaultContext}}:server"
          push: true
          tags: dhandstg/multi-server
+     - name: build and push the production version of client
+       uses: docker/build-push-action@v3
+       with:
+         context: "{{defaultContext}}:client"
+         push: true
+         tags: dhandstg/multi-client
      - name: build and push the production version of nginx server
        uses: docker/build-push-action@v3
        with:
