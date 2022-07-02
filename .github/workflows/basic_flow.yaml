@@ -14,14 +14,14 @@ jobs:
      - name: build server container from dev image
        run: |
          docker buildx build -t dhandstg/react-test -f ./client/Dockerfile.dev ./client
-     - name: run client container
-       run: |
-         docker run dhandstg/react-test npm test -- --coverage
      - name: login in docker hub
        uses: docker/login-action@v2
        with:
          username: ${{ secrets.DOCKER_HUB_USERNAME }}
          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+     - name: run client container
+       run: |
+         docker run dhandstg/react-test npm test -- --coverage
      - name: build and push the production version of client
        uses: docker/build-push-action@v3
        with:
