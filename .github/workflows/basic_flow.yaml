@@ -21,7 +21,7 @@ jobs:
          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
      - name: run client container and get test coverage
        run: |
-         docker run dhandstg/react-test npm test -- --coverage
+         docker run -e CI=true dhandstg/react-test npm test -- --coverage
      - name: build and push the production version of client
        uses: docker/build-push-action@v3
        with:
