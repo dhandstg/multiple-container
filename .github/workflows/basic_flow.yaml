@@ -1,0 +1,56 @@
+name: Basic-flow
+
+on:
+  pull
+
+jobs:
+  basicbuild:
+    runs-on: ubuntu-latest
+    steps: 
+     - name: checkout repository
+       uses: actions/checkout@v2
+     - name: set up buildx in runner 
+       uses: docker/setup-buildx-action@v1
+     - name: build server container from dev image
+       run: |
+         docker buildx build -t dhandstg/react-test -f ./client/Dockerfile.dev ./client
+     - name: run client container
+       run: |
+         docker run dhandstg/react-test npm test -- --coverage
+     - name: login in docker hub
+       uses: docker/login-action@v2
+       with:
+         username: ${{ secrets.DOCKER_HUB_USERNAME }}
+         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+     - name: build and push the production version of client
+       uses: docker/build-push-action@v3
+       with:
+         context: "{{defaultContext}}:client"
+         push: true
+         tags: dhandstg/multi-client
+     - name: build and push the production version of server
+       uses: docker/build-push-action@v3
+       with:
+         context: "{{defaultContext}}:server"
+         push: true
+         tags: dhandstg/multi-server
+     - name: build and push the production version of nginx server
+       uses: docker/build-push-action@v3
+       with:
+         context: "{{defaultContext}}:nginx"
+         push: true
+         tags: dhandstg/multi-nginx
+     - name: build and push the production version of worker
+       uses: docker/build-push-action@v3
+       with:
+         context: "{{defaultContext}}:worker"
+         push: true
+         tags: dhandstg/multi-worker
+
+
+       #run: |
+       #  docker buildx -t dhandstg/multi-client ./client
+       #  docker buildx -t dhandstg/multi-server ./server
+       #  docker buildx -t dhandstg/multi-nginx ./nginx
+       #  docker buildx -t dhandstg/multi-worker ./worker
+
